@@ -11,6 +11,7 @@
 
 %% @doc function to do a breadth first traversal of the graph starting from RootNode
 %%      up to the depth indicated by "Degree""
+%%      currently works on bi-directional edges only 
 
 bfs(Graph, RootNode, Degree) ->
 	RootPendingList = sets:to_list(sets:from_list(

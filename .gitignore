@@ -1,1 +1,5 @@
 ./_build
+/ebin/
+
+_build/**
+.settings/org.erlide.core.prefs
