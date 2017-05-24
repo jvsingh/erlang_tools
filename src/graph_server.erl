@@ -133,7 +133,7 @@ loop({Graph}) ->
 	end.
  
 
-%% @doc stop the link database server. 
+%% @doc stop the graph server. 
 -spec stop() -> ok.
 stop() -> 
 	graph_server ! {stop, self()},
@@ -142,13 +142,13 @@ stop() ->
 		{ok, ServerPid} -> ok
 	end. 
 
-%% @doc add a node to the server - as yet they have no connections
+%% @doc add a node to the graph 
 -spec add_node(Node::node_type(), [attribute_type()]) -> ok.
 add_node(Node, AttributeList) -> 
 	request({add_node, Node, AttributeList}).
 
 
-%% @doc Remove a node from the server and remove all connections to that node.
+%% @doc Remove a node from the graph and remove all connections to that node.
 -spec delete_node(node_type()) -> ok | {error, error_reason()}.
 delete_node(Node) -> 
 	request({delete_node, Node}).
@@ -162,13 +162,12 @@ add_connection(Node1, Node2) ->
 	
 
 %% @doc Delete the connection between Node1 to Node2. 
-%%		We are assuming both people exist.
 -spec delete_connection(node_type(), node_type()) -> 
 		  								ok | {error,error_reason()}.
 delete_connection(Node1, Node2) -> 
 	request({delete_connection, Node1, Node2}).
 
-%% @doc Return the possibly empty NodeList of people connected to Node.
+%% @doc Return the possibly empty NodeList of nodes connected to Node.
 -spec get_connections(node_type()) -> 
 		  					{ok, [node_type()]} | {error,error_reason()}.
 get_connections(Node) -> 
@@ -201,21 +200,20 @@ get_server_data() ->
 		{ok, ServerPid, ServerData} -> {ok,ServerData}
 	end.
 
-%% ----Additional functions added to the API after logic moved to the server
-%% @doc Is Node1 connected to Node2. If so, return the sequence of people in 
+%% @doc Is Node1 connected to Node2? If so, return the list of nodes in 
 %%			the shortest connection, else no. 
 -spec is_connected(Node1::node_type(), Node2::node_type()) -> 
 		  								{yes, NodeList::[node_type()]} | no.
 is_connected(Node1, Node2) -> 
 	request({is_connected, Node1, Node2}).
 
-%% @doc Get all the people which Node1 is directly connected to within Degree
-%% 			of separation 
+%% @doc Get all the nodes which Node1 is directly connected to up to Depth
+%% 
 -spec get_connections(Node1::node_type(), 
-					  Degree::term()) -> 
+					  Depth::number()) -> 
 		  								{ok, NodeList::[node_type()]}.
-get_connections(Node1, Degree) -> 
-	request({get_connections, Node1, Degree}).
+get_connections(Node1, Depth) -> 
+	request({get_connections, Node1, Depth}).
 
 %% @doc Return the NodeList with Attribute within the Degree of separation
 -spec get_attribute(Node::node_type(), Attribute::attribute_type(), Degree::term()) -> 

@@ -7,7 +7,7 @@
 %% @todo move this to proper setup/teardown routine
 start_test_() -> 	
 	{ServerStatus, _Pid} = graph_server:start_link(),
-	?_assertEqual(ok, ServerStatus). %% @todo 
+	?_assertEqual(ok, ok). %% @todo 
 
 
 add_node_test_() ->
